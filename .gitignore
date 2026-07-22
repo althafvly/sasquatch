@@ -1,0 +1,4 @@
+squashfs*
+*.o
+*.a
+*.tar.gz

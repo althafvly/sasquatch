@@ -147,7 +147,7 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/error.h squashfs-tools-patched/e
  
 -#ifdef SQUASHFS_TRACE
 +// CJH: Updated so that TRACE prints if -verbose is specified on the command line
-+int verbose;
++extern int verbose;
 +//#ifdef SQUASHFS_TRACE
  #define TRACE(s, args...) \
  		do { \
@@ -8396,7 +8396,7 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/LZMA/lzma465/C/LzmaDec.h squashf
 diff --strip-trailing-cr -NBbaur squashfs-tools/LZMA/lzma465/C/LzmaEnc.c squashfs-tools-patched/LZMA/lzma465/C/LzmaEnc.c
 --- squashfs-tools/LZMA/lzma465/C/LzmaEnc.c	1969-12-31 19:00:00.000000000 -0500
 +++ squashfs-tools-patched/LZMA/lzma465/C/LzmaEnc.c	2016-08-25 09:06:03.231530353 -0400
-@@ -0,0 +1,2281 @@
+@@ -0,0 +1,2282 @@
 +/* LzmaEnc.c -- LZMA Encoder
 +2009-02-02 : Igor Pavlov : Public domain */
 +
@@ -10560,6 +10560,7 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/LZMA/lzma465/C/LzmaEnc.c squashf
 +  p->rc.outStream = &outStream.funcTable;
 +
 +  res = LzmaEnc_CodeOneBlock(p, True, desiredPackSize, *unpackSize);
++  p->rc.outStream = NULL;
 +  
 +  *unpackSize = (UInt32)(p->nowPos64 - nowPos64);
 +  *destLen -= outStream.rem;
@@ -12526,7 +12527,7 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/LZMA/lzma465/history.txt squashf
 +
 +4.57           2007-12-12
 +-------------------------
-+- Speed optimizations in Ñ++ LZMA Decoder. 
++- Speed optimizations in Ã‘++ LZMA Decoder. 
 +- Small changes for more compatibility with some C/C++ compilers.
 +
 +
@@ -38312,7 +38313,7 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/unsquashfs.c squashfs-tools-patc
  #include <sys/time.h>
  #include <sys/resource.h>
  #include <limits.h>
-@@ -44,13 +44,19 @@
+@@ -44,13 +44,20 @@
  pthread_mutex_t	fragment_mutex;
  
  /* user options that control parallelisation */
@@ -38333,6 +38334,7 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/unsquashfs.c squashfs-tools-patc
 +struct override_table override = { 0 };
 +// CJH: Initialize swap to -1
 +int bytes = 0, swap = -1, file_count = 0, dir_count = 0, sym_count = 0,
++	verbose = 0,
  	dev_count = 0, fifo_count = 0;
  char *inode_table = NULL, *directory_table = NULL;
  struct hash_table_entry *inode_table_hash[65536], *directory_table_hash[65536];
@@ -38487,8 +38489,8 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/unsquashfs.c squashfs-tools-patc
 +    }
 +
 +    // CJH: Notify if endianess is different
-+    if(swap)
-+        ERROR("Reading a different endian SQUASHFS filesystem on %s\n", source);
++	if(swap)
++		ERROR("Reading a different endian SQUASHFS filesystem on %s\n", source);
  
  	/*
  	 * Try to read a Squashfs 4 superblock
